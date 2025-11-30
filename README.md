@@ -5,7 +5,7 @@ A local RAG (Retrieval-Augmented Generation) agent that answers questions based 
 ## Features
 - **Document Loading**: Supports PDF, DOCX, and TXT files.
 - **Vector Database**: Uses ChromaDB to store document embeddings locally.
-- **RAG Pipeline**: Retrieves relevant context and answers questions using OpenAI's GPT models.
+- **RAG Pipeline**: Retrieves relevant context and answers questions using **Google Gemini** models.
 - **CLI Interface**: Simple command-line interface for ingestion and chatting.
 
 ## Setup
@@ -16,18 +16,17 @@ A local RAG (Retrieval-Augmented Generation) agent that answers questions based 
    pip install -r requirements.txt
    ```
 
-2. **Ollama Setup**
-   - Install [Ollama](https://ollama.com/).
-   - Pull the required models:
-     ```bash
-     ollama pull llama3
-     ollama pull nomic-embed-text
+2. **Google Gemini Setup**
+   - Get a free API Key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+   - Add it to your `.env` file:
+     ```env
+     GOOGLE_API_KEY=your_api_key_here
      ```
-   - Ensure Ollama is running (`ollama serve`).
+   - If deploying to Streamlit Cloud, add `GOOGLE_API_KEY` to your app's secrets.
 
 3. **Environment Variables**
-   - No API keys needed for Ollama!
-   - (Optional) You can keep `.env` for other configs if needed.
+   - Create a `.env` file in the root directory.
+   - Add your `GOOGLE_API_KEY`.
 
 ## Usage
 

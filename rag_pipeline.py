@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings, ChatOllama
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableParallel
 from langchain_core.output_parsers import StrOutputParser
@@ -13,7 +13,10 @@ CHROMA_PATH = "chroma_db"
 
 def get_retriever():
     """Initializes and returns the ChromaDB retriever."""
-    embedding_function = OllamaEmbeddings(model="nomic-embed-text")
+    if not os.getenv("GOOGLE_API_KEY"):
+        return None
+        
+    embedding_function = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     
     # Check if vector DB exists
     if not os.path.exists(CHROMA_PATH):
@@ -46,7 +49,7 @@ def get_rag_chain():
     Answer:"""
     
     prompt = ChatPromptTemplate.from_template(template)
-    llm = ChatOllama(model="llama3", temperature=0)
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
 
     rag_chain_from_docs = (
         RunnablePassthrough.assign(context=(lambda x: format_docs(x["context"])))

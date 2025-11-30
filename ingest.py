@@ -4,7 +4,7 @@ from typing import List
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_ollama import OllamaEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
@@ -62,7 +62,11 @@ def create_vector_db(chunks: List[Document]):
         shutil.rmtree(CHROMA_PATH) # Clean start for this implementation to avoid duplicates easily
         print(f"Cleared existing vector DB at {CHROMA_PATH}")
 
-    embedding_function = OllamaEmbeddings(model="nomic-embed-text")
+    if not os.getenv("GOOGLE_API_KEY"):
+        print("Error: GOOGLE_API_KEY not found in environment variables.")
+        return
+
+    embedding_function = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     
     if not chunks:
         print("No chunks to ingest.")

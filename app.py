@@ -7,13 +7,7 @@ import requests
 
 st.set_page_config(page_title="Knowledge Base Agent", layout="wide")
 
-def is_ollama_running():
-    """Checks if Ollama is running on the default port."""
-    try:
-        response = requests.get("http://localhost:11434", timeout=1)
-        return response.status_code == 200
-    except requests.exceptions.ConnectionError:
-        return False
+
 
 def save_uploaded_file(uploaded_file):
     """Saves uploaded file to the docs directory."""
@@ -28,16 +22,13 @@ def save_uploaded_file(uploaded_file):
 def main():
     st.title("🤖 Knowledge Base Agent (RAG)")
 
-    if not is_ollama_running():
-        st.error("⚠️ **Ollama is not running!**")
+    if not os.getenv("GOOGLE_API_KEY"):
+        st.error("⚠️ **Google API Key not found!**")
         st.markdown("""
-        To use this app, you need to have **Ollama** installed and running.
+        To use this app, you need to provide a Google API Key.
         
-        1. **Install Ollama**: [Download here](https://ollama.com/download)
-        2. **Start Ollama**: Run `ollama serve` in your terminal or open the Ollama app.
-        3. **Pull Models**: Run `ollama pull llama3` and `ollama pull nomic-embed-text`.
-        
-        Once running, refresh this page.
+        1. **Get a Key**: [Google AI Studio](https://aistudio.google.com/app/apikey)
+        2. **Add to Secrets**: Add `GOOGLE_API_KEY` to your `.env` file or Streamlit secrets.
         """)
         st.stop()
 
